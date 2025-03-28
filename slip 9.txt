@@ -1,0 +1,64 @@
+<script>
+    function validateform() {
+        var name = document.myform.name.value;
+        var password = document.myform.password.value;
+
+        if (name == null || name == "") {
+            alert("Name can't be blank");
+            return false;
+        } else if (password.length < 6) {
+            alert("Password must be at least 6 characters long.");
+            return false;
+        }
+    }  
+</script>
+
+<body>
+    <form name="myform" method="post" onsubmit="return validateform()">
+        Name: <input type="text" name="name"><br />
+        Password: <input type="password" name="password"><br />
+        <input type="submit" value="register">
+    </form>
+</body>
+
+
+
+
+
+
+
+
+
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+import pandas as pd
+
+# Define the items and transactions
+items = ['item1', 'item2', 'item3', 'item4']
+transactions = [['item1', 'item2', 'item3'],
+                ['item2', 'item3'],
+                ['item1', 'item2', 'item4'],
+                ['item1', 'item4'],
+                ['item2', 'item3', 'item4'],
+                ['item1', 'item3', 'item4'],
+                ['item1', 'item2'],
+                ['item1', 'item3'],
+                ['item3', 'item4'],
+                ['item2', 'item4']]
+
+# Convert the transactions into a binary matrix
+te = TransactionEncoder()
+te_ary = te.fit_transform(transactions)
+
+# Convert the binary matrix into a pandas DataFrame
+df = pd.DataFrame(te_ary, columns=te.columns_)
+
+# Generate frequent itemsets with a minimum support of 0.3
+frequent_itemsets = apriori(df, min_support=0.3, use_colnames=True)
+
+# Generate association rules with a minimum confidence of 0.7
+association_rules_result = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)
+
+# Print the frequent itemsets and association rules
+print(frequent_itemsets)
+print(association_rules_result)

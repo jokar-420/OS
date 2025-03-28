@@ -1,0 +1,188 @@
+ajaxbook.xml 
+ 
+<?xml version="1.0" encoding="UTF-8"?> 
+<bookstore> 
+ 
+  <book category="cooking"> 
+    <title lang="en">Everyday Italian</title> 
+    <author>Giada De Laurentiis</author> 
+    <year>2005</year> 
+    <price>30.00</price> 
+  </book> 
+ 
+  <book category="children"> 
+    <title lang="en">Harry Potter</title> 
+    <author>J K. Rowling</author> 
+    <year>2005</year> 
+    <price>29.99</price> 
+  </book> 
+ 
+  <book category="web"> 
+    <title lang="en">XQuery Kick Start</title> 
+    <author>James McGovern</author> 
+    <author>Per Bothner</author> 
+    <author>Kurt Cagle</author> 
+    <author>James Linn</author> 
+    <author>Vaidyanathan Nagarajan</author> 
+    <year>2003</year> 
+    <price>49.99</price> 
+  </book> 
+ 
+  <book category="web" cover="paperback"> 
+    <title lang="en">Learning XML</title> 
+    <author>Erik T. Ray</author> 
+    <year>2003</year> 
+    <price>39.95</price> 
+  </book> 
+ 
+</bookstore> 
+ 
+ 
+
+
+
+
+
+ajaxbook.html 
+ 
+<html> 
+ 
+<script type="text/javascript"> 
+ 
+function display(str) 
+ 
+{ 
+ 
+ob = new XMLHttpRequest(); 
+ 
+ob.open("GET","ajaxbook.php?q="+str,true); 
+ 
+ob.send(); 
+ 
+ob.onreadystatechange = function() 
+ 
+{ 
+ 
+if(ob.readyState == 4 && ob.status == 200) 
+ 
+document.getElementById("i").innerHTML = ob.responseText; 
+ 
+} 
+ 
+} 
+ 
+</script> 
+ 
+<body> 
+ 
+<h2>DISPLAY INFORMATION OF Book</h2> 
+ 
+Enter Book Name <input type=text id='txt' name='bn'> 
+ 
+<input type=submit value="DISPLAY BOOK INFORMATION" onclick=display(txt.value)> 
+ 
+<span id=i></span> 
+ 
+</body> 
+ 
+</html> 
+
+
+
+
+
+ 
+ajaxbook.php 
+ 
+<?php 
+$bn=$_REQUEST['q']; 
+ 
+$xml=simplexml_load_file("ajaxbook.xml") or die("Error: Cannot create object"); 
+ 
+echo "<h1 align=center> Books Information </h1>"; 
+echo "<table border=2>"; 
+echo    "<tr> <th> Book Category </th> 
+              <th> Book Language </th> 
+              <th> Book Title </th> 
+              <th> Book Author </th> 
+              <th> Book Year </th> 
+              <th> Book Price </th> 
+        </tr>"; 
+ 
+foreach($xml->children() as $books) 
+{ 
+ 
+    $category = $books['category']; 
+    $language = $books->title['lang']; 
+    
+ 
+    if ($bn == $books->title) 
+ 
+    { 
+    echo "<tr>  <td>$category </td> 
+                <td>$language </td> 
+                <td>$books->title </td> 
+                <td>$books->author </td> 
+                <td>$books->year </td> 
+                <td>$books->price</td> 
+            </tr>"; 
+     }   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import sent_tokenize, word_tokenize
+from heapq import nlargest
+
+# Sample text paragraph you can write any text
+text = """
+Natural language processing (NLP) is a subfield of linguistics, computer science, information engineering, and artificial intelligence concerned with the interactions between computers and human languages, in particular how to program computers to process and analyze large amounts of natural language data. Challenges in natural language processing frequently involve speech recognition, natural language understanding, and natural language generation. The history of natural language processing generally started in the 1950s, although work can be found from earlier periods.
+"""
+
+# Remove special characters and digits
+text = re.sub(r'[^a-zA-Z\s]', '', text)
+
+# Tokenize the text into sentences
+sentences = sent_tokenize(text)
+
+# Tokenize each sentence into words and remove stopwords
+stop_words = set(stopwords.words('english'))
+words = []
+for sentence in sentences:
+    words.extend(word_tokenize(sentence))
+
+words = [word.lower() for word in words if word.lower() not in stop_words]
+
+# Calculate word frequency
+word_freq = nltk.FreqDist(words)
+
+# Calculate sentence scores based on word frequency
+sentence_scores = {}
+for sentence in sentences:
+    for word in word_tokenize(sentence.lower()):
+        if word in word_freq:
+            if len(sentence.split()) < 30:  # optional filter to exclude long sentences
+                if sentence not in sentence_scores:
+                    sentence_scores[sentence] = word_freq[word]
+                else:
+                    sentence_scores[sentence] += word_freq[word]
+
+# Generate summary by selecting top 3 sentences with highest scores
+summary_sentences = nlargest(3, sentence_scores, key=sentence_scores.get)
+summary = ' '.join(summary_sentences)
+
+print(summary)

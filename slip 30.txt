@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<Book> 
+    <yoga> 
+        <Book_Title> Happy Yoga   </Book_Title> 
+        <Book_Author> Ramdev Baba  </Book_Author> 
+        <Book_Price>  4000  </Book_Price> 
+    </yoga> 
+ 
+    <story> 
+        <Book_Title> Ramayan   </Book_Title> 
+        <Book_Author> Ramanand Sagar  </Book_Author> 
+        <Book_Price>  5000  </Book_Price> 
+    </story> 
+ 
+    <Technical> 
+        <Book_Title> PHP   </Book_Title> 
+        <Book_Author> Gajanan Joshi  </Book_Author> 
+        <Book_Price> 4500   </Book_Price> 
+    </Technical> 
+</Book>
+
+
+
+
+
+
+
+
+
+
+
+transactions = [['eggs', 'milk', 'bread'], ['eggs', 'apple'], ['milk', 'bread'], ['apple', 'milk'], ['milk', 'apple', 'bread']]
+
+# Create a dictionary to map items to unique numeric values
+item_to_num = {'eggs': 1, 'milk': 2, 'bread': 3, 'apple': 4}
+
+# Convert the categorical values in the dataset to numeric values
+numeric_transactions = []
+for transaction in transactions:
+    numeric_transaction = [item_to_num[item] for item in transaction]
+    numeric_transactions.append(numeric_transaction)
+
+print(numeric_transactions)
+
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Generate frequent itemsets with a minimum support of 0.4
+frequent_itemsets = apriori(numeric_transactions, min_support=0.4, use_colnames=True)
+
+# Generate association rules with a minimum confidence of 0.7
+rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)
+
+print(frequent_itemsets)
+print(rules)

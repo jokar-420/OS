@@ -1,0 +1,109 @@
+
+
+done.php
+<?php
+echo"welcome to web page";
+?>
+
+
+next.php
+
+<?php
+echo"Error";
+?>
+
+
+Q1.php
+
+<?php
+
+session_start();
+
+if(!isset($_SESSION['count'])){
+    $_SESSION['count']=0;
+}
+
+$user='hello';
+$pass='123';
+
+if($_SERVER['REQUEST_METHOD']=='POST'){
+    $u1=$_POST['name'];
+    $p1=$_POST['pass'];
+
+    if($_SESSION['count']>=3){
+        header('Location: next.php');
+    }
+    else{
+        if($user==$u1 && $pass==$p1){
+            header('Location:done.php');
+        }else{
+            $_SESSION['count']++;
+        }
+    }
+}
+
+
+
+
+?>
+
+<html>
+    <head>
+        <title>
+
+        </title>
+    </head>
+
+    <body>
+        
+        <form method="post">
+        Username : <input type="text" name="name"><br>
+        Password : <input type="text" name="pass"><br>
+        <input type="submit" value="submit">
+        </form>
+
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+# Create the dataset
+data = {
+    'UserID': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    'Gender': ['Male', 'Male', 'Female', 'Female', 'Male', 'Male', 'Female', 'Female', 'Male', 'Female'],
+    'Age': [19, 35, 26, 27, 19, 27, 32, 25, 33, 45],
+    'EstimatedSalary': [19000, 20000, 43000, 57000, 76000, 58000, 82000, 32000, 69000, 65000],
+    'Purchased': [0, 0, 0, 1, 1, 0, 1, 0, 1, 1]
+}
+df = pd.DataFrame(data)
+
+# Identify the independent and target variables
+X = df.iloc[:, 1:4].values  # Independent variables (Gender, Age, EstimatedSalary)
+Y = df.iloc[:, 4].values    # Target variable (Purchased)
+
+# Split the variables into training and testing sets with a 7:3 ratio
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+
+# Build the logistic regression model
+Lr = LogisticRegression(random_state=0)
+Lr.fit(X_train, y_train)
+
+# Predict a single observation
+observation = [[0, 30, 87000]]  # Gender=0 (Male), Age=30, EstimatedSalary=87000
+prediction = Lr.predict(observation)
+print("Prediction for a single observation:", prediction)
+
+# Predict multiple observations
+observations = [[0, 30, 87000], [1, 50, 45000], [1, 22, 30000]]  # Gender, Age, EstimatedSalary
+predictions = Lr.predict(observations)
+print("Predictions for multiple observations:", predictions)

@@ -1,0 +1,61 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"> </script> 
+    <script> 
+        $(document).ready(function(){ 
+        $("button").click(function(){ 
+        $("p").before("<h1> Hello Gajanan! </h1>"); 
+        $("p").after("<h1> Hello Gautam! </h1>"); 
+        }); 
+        });   
+    </script>   
+ 
+</head> 
+<body> 
+ <h2> This is a heading</h2> 
+<p>  Vidya Pratishthan is a name fondly synonymous with education in all its myriad forms and 
+academic aspects. Since its inception in 1972, the Institution has majestically scaled the ladder of 
+success with a profundity that aptly reflects its commitment to accord educational facilities to all 
+sections of society.   </p> 
+     <button> Click me! </button> 
+</body> 
+</html>
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Create the dataset
+dataset = {
+    1: ["eggs", "milk", "bread"],
+    2: ["eggs", "apple"],
+    3: ["milk", "bread"],
+    4: ["apple", "milk"],
+    5: ["milk", "apple", "bread"]
+}
+
+# Convert categorical values into numeric format using TransactionEncoder
+te = TransactionEncoder()
+te_ary = te.fit(list(dataset.values())).transform(list(dataset.values()))
+
+# Create a DataFrame
+df = pd.DataFrame(te_ary, columns=te.columns_)
+
+# Apply Apriori algorithm to generate frequent itemsets and association rules
+min_sup = 0.4
+frequent_itemsets = apriori(df, min_support=min_sup, use_colnames=True)
+association_rules_result = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.6)
+
+# Print the frequent itemsets and association rules
+print("Frequent Itemsets:\n", frequent_itemsets)
+print("\nAssociation Rules:\n", association_rules_result)

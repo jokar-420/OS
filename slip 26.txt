@@ -1,0 +1,133 @@
+create table employee (eno int,ename varchar(30),designation varchar(30),salary int); 
+ 
+insert into employee values(1,'gautam','Assistant Professor',50000); 
+insert into employee values(2,'gajanan','HOD',70000); 
+ 
+ 
+select * from employee; 
+ eno |  ename  |     designation     | salary 
+   1 | gautam  | Assistant Professor |  50000 
+   2 | gajanan | HOD                 |  70000 
+(2 rows) 
+ 
+employee1.html 
+ 
+<html> 
+ 
+<script type="text/javascript"> 
+ 
+function display(str) 
+ 
+{ 
+ 
+ob = new XMLHttpRequest(); 
+ 
+ob.open("GET","employee1.php?q="+str,true); 
+ 
+ 
+ob.send(); 
+ 
+ob.onreadystatechange = function() 
+ 
+{ 
+ 
+if(ob.readyState == 4 && ob.status == 200) 
+ 
+document.getElementById("i").innerHTML = ob.responseText; 
+ 
+} 
+ 
+} 
+ 
+</script> 
+ 
+<body> 
+ 
+<h2>DISPLAY INFORMATION OF EMPLOYEE</h2> 
+ 
+ 
+Enter Employee Name <input type=text id="txt1" name="en"> 
+ 
+ 
+<br> 
+ 
+<input type=submit value="DISPLAY EMPLOYEE INFORMATION" onclick=display(txt1.value)> 
+ 
+<span id=i></span> 
+ 
+</body> 
+ 
+</html> 
+ 
+ 
+ 
+employee1.php 
+ 
+<?php 
+$en=$_REQUEST['q']; 
+ 
+ 
+$con_string = "host=172.16.6.1 dbname=php21200 user=php21200 password=''"; 
+ 
+$con = pg_connect($con_string); 
+ 
+echo "</br>"; 
+ 
+$q = "select * from employee where ename='$en';"; 
+ 
+$rs = pg_query($con,$q) or die("Cannot Execute query"); 
+ 
+while($row = pg_fetch_row($rs)) 
+ 
+echo "$row[0] $row[1] $row[2]\n</br>"; 
+ 
+pg_close();                        
+ 
+?> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import re
+from nltk.tokenize import sent_tokenize
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Text to summarize
+text = "Hello all, Welcome to Python Programming Academy. Python Programming Academy is a nice platform to learn new programming skills. It is difficult to get enrolled in this Academy."
+
+# Preprocess the text to remove special characters and digits
+preprocessed_text = re.sub(r'[^a-zA-Z\s]', '', text)
+
+# Tokenize the preprocessed text into sentences
+sentences = sent_tokenize(preprocessed_text)
+
+# Calculate the importance score of each sentence using TF-IDF
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(sentences)
+similarity_matrix = cosine_similarity(tfidf_matrix)
+
+# Select top N sentences based on their importance score (based on last row of similarity matrix)
+N = 2
+top_sentences = sorted(range(len(similarity_matrix[-1])), key=lambda i: similarity_matrix[-1][i], reverse=True)[-N:]
+
+# Concatenate the top sentences to form the summary
+summary = ''
+for i in sorted(top_sentences):
+    summary += sentences[i] + ' '
+
+# Print the summary
+print(summary)

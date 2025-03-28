@@ -1,0 +1,88 @@
+welcome_message.php/
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+$this->load->helper('url');
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Q1</title>
+</head>
+<body>
+	<input type="text" id="input" />
+	<p id="output"></p>
+	<button id="btn">check</button>
+<script src="<?php echo base_url('public/js/new.js'); ?>">
+</script>
+</body>
+</html>
+
+public/
+....js/
+........new.js/
+let button = document.getElementById("btn");
+let input = document.getElementById("input");
+let output = document.getElementById("output");
+button.addEventListener("click", function () {
+	let current = +input.value;
+	if (current < 0) {
+		output.innerText = "Negative";
+	} else if (current > 0) {
+		output.innerText = "Positive";
+	} else {
+		output.innerText = "Zero";
+	}
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
+
+# 1. Collect data
+data = pd.read_csv('user_data.csv')
+
+# 2. Preprocess data
+data.dropna(inplace=True)  # Drop rows with missing values
+X = data['age'].values.reshape(-1, 1)  # Independent variable (age)
+Y = data['income'].values.reshape(-1, 1)  # Dependent variable (income)
+
+# 3. Split data
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=0)
+
+# 4. Train the model
+regressor = LinearRegression() 
+regressor.fit(X_train, y_train)
+
+# 5. Predict values
+y_pred = regressor.predict(X_test)
+
+# 6. Evaluate model
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+print("Mean squared error:", mse)
+print("R-squared:", r2)
+
+# 7. Visualize results
+plt.scatter(X_test, y_test, color='gray')  # Scatter plot of the actual data
+plt.plot(X_test, y_pred, color='red', linewidth=2)  # Line plot of the predicted values
+plt.xlabel('Age')
+plt.ylabel('Income')
+plt.title('Linear Regression: Age vs Income')
+plt.show()

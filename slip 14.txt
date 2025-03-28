@@ -1,0 +1,127 @@
+psql -h 172.16.6.1 
+ 
+create table teacher (tno int,tname varchar(30),qualification varchar(30),salary int); 
+CREATE TABLE 
+ 
+insert into teacher values(1,'gautam','Mphil',60000); 
+insert into teacher values(2,'gajanan','msc',80000); 
+ 
+select * from teacher; 
+ tno |  tname  | qualification | salary 
+   1 | gautam  | Mphil         |  60000 
+   2 | gajanan | msc           |  80000 
+(2 rows) 
+ 
+teacher2.html 
+ 
+<html> 
+ 
+<script type="text/javascript"> 
+ 
+function display(str) 
+ 
+{ 
+ 
+ob = new XMLHttpRequest(); 
+ 
+ob.open("GET","teacher2.php?q="+str,true); 
+ 
+ob.send(); 
+ 
+ob.onreadystatechange = function() 
+ 
+{ 
+ 
+if(ob.readyState == 4 && ob.status == 200) 
+ 
+document.getElementById("i").innerHTML = ob.responseText; 
+ 
+} 
+ 
+} 
+ 
+</script> 
+ 
+<body> 
+ 
+<h2>DISPLAY INFORMATION OF TEACHER</h2> 
+ 
+ 
+Enter Teacher Name <input type=text id="txt1" name="tn"> 
+ 
+ 
+<br> 
+ 
+<input type=submit value="DISPLAY INFORMATION" onclick=display(txt1.value)> 
+ 
+<span id=i></span> 
+ 
+ 
+ 
+</body> 
+ 
+</html> 
+ 
+teacher2.php 
+ 
+ 
+<?php 
+ 
+$tn=$_REQUEST['q']; 
+ 
+ 
+$con_string = "host=172.16.6.1 dbname=php21200 user=php21200 password=''"; 
+ 
+$con = pg_connect($con_string); 
+ 
+ 
+echo "</br>"; 
+ 
+$q = "select * from teacher where tname='$tn';"; 
+ 
+ 
+$rs = pg_query($con,$q) or die("Cannot Execute query"); 
+ 
+while($row = pg_fetch_row($rs)) 
+ 
+echo "$row[0] $row[1] $row[2]\n</br>"; 
+ 
+pg_close();                        
+ 
+?> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori
+
+# Create the dataset
+TID = {
+    1: ["apple", "mango", "banana"],
+    2: ["mango", "banana", "cabbage", "carrots"],
+    3: ["mango", "banana", "carrots"],
+    4: ["mango", "carrots"]
+}
+
+# Convert the categorical values into numeric format
+Te = TransactionEncoder()
+Te_ary = Te.fit([TID[i] for i in TID]).transform([TID[i] for i in TID])
+df = pd.DataFrame(Te_ary, columns=Te.columns_)
+
+# Apply the apriori algorithm with different min_support values
+min_sup_values = [0.25, 0.5, 0.75]
+for min_sup in min_sup_values:
+    frequent_itemsets = apriori(df, min_support=min_sup, use_colnames=True)
+    print("Frequent itemsets with min_sup =", min_sup)
+    print(frequent_itemsets)
+    print("\n")

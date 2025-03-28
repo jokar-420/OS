@@ -1,0 +1,103 @@
+<html> 
+    <head>  
+        <title> Self Processing Page Fibonacci series ...... </title> 
+    </head> 
+    <body> 
+        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST"> 
+            Enter a Number  :  
+            <input type="text" name="num"> 
+            <input type="submit" name="Fibonacci Series"> 
+        </form> 
+    </body> 
+</html> 
+ 
+
+<?php 
+$num=$_POST['num']; 
+$n1=$n2=1; 
+echo $n1;  
+echo "<br>"; 
+echo $n2; 
+echo "<br>"; 
+for($i=1;$i<=$num-2;$i++) 
+{ 
+    $n3=$n1+$n2; 
+    echo $n3; 
+    echo "<br>"; 
+    $n1=$n2; 
+    $n2=$n3; 
+  } 
+?> 
+
+
+
+------------------
+<html> 
+    <head> 
+        <title> Self Processing Page sum of digit of a number ...... </title> 
+    </head> 
+    <body> 
+        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST"> 
+            Enter a Number  : 
+            <input type="text" name="num"> 
+            <input type="submit" name="Sum of digits"> 
+        </form> 
+    </body> 
+</html> 
+ 
+ 
+<?php 
+$num=$_POST['num']; 
+$temp=$num; 
+$sum=0; 
+while($temp>0) 
+     { 
+    $r=$temp%10; 
+    $sum=$sum+$r; 
+    $temp=$temp/10; 
+     } 
+ 
+echo "Sum of Digits of $num  = $sum"; 
+ 
+?> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Import necessary libraries
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Load the dataset
+data = pd.read_csv('student_scores.csv')
+
+# Split the data into input and output variables
+X = data.iloc[:, :-1].values  # All columns except the last
+Y = data.iloc[:, -1].values   # Only the last column
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=0)
+
+# Create the logistic regression model and fit it to the training data
+classifier = LogisticRegression()
+classifier.fit(X_train, y_train)
+
+# Make predictions on the testing set
+y_pred = classifier.predict(X_test)
+
+# Evaluate the model's accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)

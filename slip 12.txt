@@ -1,0 +1,162 @@
+contact.dat 
+1 Isha 65768798 98765432 Daughter 
+2 Megha 65235689 87654329 Mother 
+
+
+
+ 
+contact.html 
+ 
+<html> 
+ 
+<head> 
+ 
+<style> 
+ 
+span 
+ 
+{ 
+ 
+font-size: 25px; 
+ 
+} 
+ 
+table 
+ 
+{ 
+ 
+color: blueviolet; ; 
+ 
+} 
+ 
+</style> 
+ 
+<script type="text/javascript" > 
+ 
+function print() 
+ 
+{ 
+ 
+var ob=false; 
+ 
+ob=new XMLHttpRequest(); 
+ 
+ob.open("GET","contact.php?");             
+ 
+ob.send(); 
+ 
+ob.onreadystatechange=function() 
+ 
+{ 
+ 
+if(ob.readyState==4 && ob.status==200) 
+ 
+{ 
+ 
+document.getElementById("i").innerHTML=ob.responseText; 
+ 
+} 
+ 
+} 
+ 
+} 
+ 
+</script> 
+ 
+</head> 
+ 
+<body> 
+ 
+<center> 
+ 
+<h3>Display the contents of a contact.dat file </h3> 
+ 
+<br><input type="button" value=Print onclick="print()" > 
+ 
+<span id="i"></span> 
+ 
+</center> 
+ 
+</body> 
+ 
+</html> 
+ 
+
+
+ 
+contact.php 
+ 
+<?php 
+ 
+$fp = fopen('contact.dat','r'); 
+ 
+echo "<table border=1>"; 
+ 
+echo "<tr><th>Sr. No.</th><th>Name</th><th>Residence No.</th><th>Mob. 
+no.</th><th>Relation</th></tr>"; 
+ 
+while($row = fscanf($fp,"%s %s %s %s %s")) 
+ 
+{ 
+ 
+echo "<tr>"; 
+ 
+foreach($row as $r) 
+ 
+{ 
+ 
+echo "<td>$r</td>"; 
+ 
+} 
+ 
+echo "</tr>"; 
+ 
+} 
+ 
+echo "</table>"; 
+ 
+fclose($fp); 
+ 
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+
+# Create a random dataset with 10 samples
+Heights = np.random.normal(170, 10, 10)  # Random heights with mean 170 and std 10
+Weights = np.random.normal(70, 5, 10)    # Random weights with mean 70 and std 5
+
+# Combine the two arrays into a single dataset
+Dataset = pd.DataFrame({'Height': Heights, 'Weight': Weights})
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(Dataset['Height'], Dataset['Weight'], test_size=0.2, random_state=42)
+
+# Create a Linear Regression model and fit it to the training data
+Lr_model = LinearRegression()
+Lr_model.fit(X_train.values.reshape(-1, 1), y_train)
+
+# Print the model coefficients
+print('Model Coefficients:', Lr_model.coef_)
+
+# Predict the weights for the test data and print the predictions
+Y_pred = Lr_model.predict(X_test.values.reshape(-1, 1))
+print('Predictions:', Y_pred)

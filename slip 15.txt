@@ -1,0 +1,90 @@
+//html
+<html>
+
+<head>
+    <script type="text/javascript">
+        function m1(str) {
+            var ob = false;
+            ob = new XMLHttpRequest();
+            ob.open("GET", "1.php?q=" + str);
+            ob.send();
+            ob.onreadystatechange = function () {
+                if (ob.readyState == 4 && ob.status == 200) {
+                    document.getElementById("a").innerHTML = ob.responseText;
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <form>
+        Search<input type=text name=search size="20" onkeyup="m1(form.search.value)">
+        <input type=button value="submit" onclick="m1(form.search.value)">
+    </form>
+    suggestions :<span id="a"></span><br>
+
+</body>
+</html>
+
+
+
+//php
+<?php
+$a=array("pune","satara","nashik","sangli","mumbai","murud","akola","dound","dhule","ratnagiri","rajpur");
+$q=$_GET['q'];
+if(strlen($q)>0)
+{       
+    $match="";
+    for($i=0;$i<count($a);$i++)
+    {
+    if(strtolower($q)==strtolower(substr($a[$i],0,strlen($q))))
+    {
+        if($match=="")
+            $match=$a[$i];                         
+        else 
+            $match=$match.",".$a[$i];
+    }          
+    }
+if($match=="")
+    echo "No Suggestios";
+else 
+    echo $match;
+}
+?>
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Create the dataset
+data = {
+    'No': [1, 2, 3, 4],
+    'Company': ['Tata', 'MG', 'Kia', 'Hyundai'],
+    'Model': ['Nexon', 'Astor', 'Seltos', 'Creta'],
+    'Year': [2017, 2021, 2019, 2015]
+}
+df = pd.DataFrame(data)
+
+# Convert categorical values into numeric format
+df['Company'] = pd.Categorical(df['Company'])
+df['Model'] = pd.Categorical(df['Model'])
+df['Company'] = df['Company'].cat.codes
+df['Model'] = df['Model'].cat.codes
+print(df)
+
+# Generate frequent itemsets with min_sup=0.5
+frequent_itemsets = apriori(df, min_support=0.5, use_colnames=True)
+print(frequent_itemsets)
+
+# Generate association rules with min_threshold=0.7
+association_rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)
+print(association_rules)

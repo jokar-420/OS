@@ -1,0 +1,60 @@
+<html> 
+<head><title>Addition of two numbers</title></head> 
+<body> 
+<form name="frm1"> 
+<h1> Addition of two numbers </h1> 
+<input type="button" value="Display Addition" onclick="check()"> 
+</form> 
+<script type="text/javascript">  
+function check() 
+{ 
+var a,b,c; 
+confirm("Exams are near, have you started for preparing?"); 
+a=prompt("Enter first number"); 
+b=prompt("Enter second number"); 
+c=parseInt(a)+parseInt(b); 
+alert("Addition of two numbers is:-" +c); 
+} 
+</script> 
+</body> 
+</html>
+
+
+
+
+
+
+
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Load the dataset
+df = pd.read_csv('market_basket.csv', header=None)  # Adjust if needed to match the format of your dataset
+
+# Drop any rows with null values
+df.dropna(inplace=True)
+
+# Convert categorical values to numeric format (one-hot encoding)
+te = TransactionEncoder()
+te_ary = te.fit(df.values).transform(df.values)
+Df = pd.DataFrame(te_ary, columns=te.columns_)
+
+# Generate frequent itemsets using apriori algorithm
+frequent_itemsets = apriori(Df, min_support=0.01, use_colnames=True)
+
+# Generate association rules
+rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
+
+# Display information about the dataset
+print("Dataset Information:")
+print(df.info())
+
+# Display the frequent itemsets
+print("\nFrequent Itemsets:")
+print(frequent_itemsets)
+
+# Display the association rules
+print("\nAssociation Rules:")
+print(rules)
+

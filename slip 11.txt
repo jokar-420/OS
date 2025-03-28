@@ -1,0 +1,72 @@
+<html> 
+<head>     
+<title>Test change program</title> 
+</head> 
+<body> 
+<form name="frm1"> 
+<h1>  to Change text font color </h1> 
+Enter student name:-  
+<input type="text" id="demo" name="t1" onblur="check()"> 
+</form> 
+<script type="text/javascript">  
+function check() 
+{ 
+alert("hello"); 
+var a=frm1.t1.value; 
+if(a.length==0) 
+{ 
+   var x = document.createElement("IMG"); 
+  x.setAttribute("src", "C:\Users\Student\Pictures\nature1.jpg"); 
+  x.setAttribute("width", "304"); 
+  x.setAttribute("height", "228"); 
+  x.setAttribute("alt", "The Pulpit Rock"); 
+  document.body.appendChild(x); 
+ }  
+else 
+{ 
+   document.getElementById("demo").style.color ="blue"; 
+   document.getElementById("demo").style.fontSize = "40"; 
+}  
+} 
+</script> 
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Creating the dataset
+dataset = [['butter', 'bread', 'milk'], 
+           ['butter', 'flour', 'milk', 'sugar'], 
+           ['butter', 'eggs', 'milk', 'salt'], 
+           ['eggs'], 
+           ['butter', 'flour', 'milk', 'salt']]
+
+# Converting the categorical values into numeric format
+te = TransactionEncoder()
+te_ary = te.fit(dataset).transform(dataset)
+df = pd.DataFrame(te_ary, columns=te.columns_)
+
+# Generating frequent itemsets using Apriori algorithm with different min_support values
+min_sup_values = [0.4, 0.3, 0.2]
+
+for min_sup in min_sup_values:
+    frequent_itemsets = apriori(df, min_support=min_sup, use_colnames=True)
+    print(f"Frequent itemsets with minimum support of {min_sup}:")
+    print(frequent_itemsets)
+    
+    # Generating association rules
+    rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)
+    print(f"Association rules with minimum support of {min_sup}:")
+    print(rules)

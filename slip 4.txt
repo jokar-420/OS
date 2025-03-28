@@ -1,0 +1,138 @@
+sessionemp.html 
+ 
+<html> 
+<head> 
+    <title> EMPLOYEE DETAILS </title> 
+</head> 
+<body> 
+    <form action="sessionemp.php" method="GET"> 
+ 
+        Enter Employee Number  : <input type="text" name="eno"> <br> 
+        Enter Employee Name  : <input type="text" name="ename"> <br> 
+        Enter Employee Designation  : <input type="text" name="edesi"> <br> 
+ 
+        <input type="submit" name="submit" value="Submit"> 
+        <input type="reset" name="reset" value="Reset"> 
+    </form> 
+     
+</body> 
+</html> 
+ 
+ 
+ 
+ 
+ 
+sessionemp.php 
+<?php 
+echo "<br> Following values are taken from emp.html <br>"; 
+echo "Employee Number is = ".$_GET['eno']."<br>"; 
+echo "Employee Name is = ".$_GET['ename']."<br>"; 
+echo "Employee Designation is = ".$_GET['edesi']."<br>"; 
+ 
+session_start(); 
+ 
+$_SESSION['eno']=$_GET['eno']; 
+$_SESSION['ename']=$_GET['ename']; 
+$_SESSION['edesi']=$_GET['edesi']; 
+ 
+?> 
+ 
+<html> 
+<head> 
+    <title> EMPLOYEE Salaray details </title> 
+</head> 
+<body> 
+    <form action="sessionemppayslip.php" method="GET"> 
+        Enter Employee DA  : <input type="text" name="eda"> <br> 
+        Enter Employee HRA  : <input type="text" name="ehra"> <br> 
+        Enter Employee TA  : <input type="text" name="eta"> <br> 
+        <input type="submit" name="submit" value="Submit"> 
+        <input type="reset" name="reset" value="Reset"> 
+    </form> 
+    
+</body> 
+</html> 
+ 
+
+
+sessionemppayslip.php 
+<?php 
+session_start(); 
+  
+$eda=$_GET['eda']; 
+$ehra=$_GET['ehra']; 
+$eta=$_GET['eta']; 
+$totalsal=$eda+$ehra+$eta; 
+ 
+echo "<br> Employee Number      :".$_SESSION['eno']; 
+echo "<br> Employee Name        :".$_SESSION['ename']; 
+echo "<br> Employee Designation :".$_SESSION['edesi']; 
+echo "<br> Employee DA          :  $eda"; 
+echo "<br> Employee HRA         :  $ehra"; 
+echo "<br> Employee TA          :  $eta"; 
+echo "<br> Employee Total Salary:  $totalsal"; 
+echo "<br> <br>"; 
+echo "<table border=2>"; 
+    echo "<tr>  Employee Pay Slip  </tr>"; 
+    echo "<tr>  <th> Employee Number </th> 
+                <th> Employee Name </th> 
+                <th> Employee Designation </th> 
+                <th> Employee DA </th> 
+                <th> Employee HRA </th> 
+                <th> Employee TA </th> 
+                <th> Employee Total Salary </th> </tr> "; 
+echo "<br> <br>"; 
+echo "<tr>  <td> ".$_SESSION['eno']." </td> 
+            <td> ".$_SESSION['ename']."</td> 
+            <td> ".$_SESSION['edesi']."</td> 
+            <td> $eda </td> 
+            <td> $ehra </td> 
+            <td> $eta </td> 
+            <td> $totalsal </td> </tr>"; 
+ 
+echo "</table>"; 
+ 
+session_destroy(); 
+?>
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+import random
+from sklearn.linear_model import LinearRegression
+
+# Create the dataset
+fish_species = ['Tuna', 'Salmon', 'Trout', 'Bass', 'Sardine', 'Cod', 'Mackerel']
+weights = []
+
+# Generate random weights for each species (50 samples per species)
+for i in range(50):
+    fish_weight = []
+    for j in range(7):
+        weight = random.randint(1, 20)  # Random weight between 1 and 20
+        fish_weight.append(weight)
+    weights.append(fish_weight)
+
+# Create a DataFrame with fish species as columns and their corresponding weights
+df = pd.DataFrame(weights, columns=fish_species)
+
+# Create the linear regression model
+X = df.iloc[:, :-1]  # Independent variables (all columns except the last)
+Y = df.iloc[:, -1]   # Target variable (last column)
+
+model = LinearRegression()
+model.fit(X, Y)
+
+# Predict the weight of a new fish species
+new_fish = [[10, 12, 15, 7, 4, 8]]  # Example input with random weights for the species
+predicted_weight = model.predict(new_fish)
+
+# Print the predicted weight
+print("Predicted weight:", predicted_weight)

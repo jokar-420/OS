@@ -1,0 +1,136 @@
+cricket.xml 
+<?xml version="1.0" encoding="UTF-8"?> 
+<CricketTeam> 
+ 
+    <Team Country="Austrelia"> 
+    <Player>Gajanan</Player> 
+    <Runs>100</Runs> 
+    <Wickets>10</Wickets> 
+     </Team> 
+ 
+     <Team Country="India"> 
+         <Player>Gautam</Player> 
+         <Runs>50</Runs> 
+         <Wickets>5</Wickets> 
+     </Team> 
+ 
+</CricketTeam> 
+ 
+ 
+ 
+ 
+cricket.html 
+<html> 
+<head> <title>  Cricket information </title> </head> 
+ 
+<body> 
+ 
+<form method="POST" action="cricket.php"> 
+ 
+<lable> Name of the Country </lable> 
+<input type="text" name="countryname"> 
+<br> <br> 
+ 
+<lable> Name of the Player </lable> 
+<input type="text" name="playername"> 
+<br> <br> 
+ 
+ 
+<lable> Total Runs  </lable> 
+<input type="text" name="runs"> 
+<br> <br> 
+ 
+<lable> Total Wickets </lable> 
+<input type="text" name="wickets"> 
+<br> <br> 
+ 
+ 
+<input type="submit" value=" Add in to Team"> 
+<input type="reset"> 
+ 
+</body> 
+</html> 
+ 
+cricket.php 
+<?php 
+$xml=simplexml_load_file("cricket.xml") or die("Error: Cannot create object"); 
+ 
+/* Accept Vlaues From User and ADD record */ 
+ 
+$cn=$_POST['countryname']; 
+$pn=$_POST['playername']; 
+$runs=$_POST['runs']; 
+$wickets=$_POST['wickets']; 
+ 
+ 
+$Team=$xml->addChild('Team'); 
+$Team->addAttribute('Country',$cn); 
+$Team->addChild('Player',$pn); 
+$Team->addChild('Runs',$runs); 
+$Team->addChild('Wickets',$wickets); 
+ 
+ 
+/* Directly ADD record */ 
+ 
+$Team=$xml->addChild('Team'); 
+$Team->addAttribute('Country','srilanka'); 
+$Team->addChild('Player','jaysurya'); 
+$Team->addChild('Runs','5000'); 
+$Team->addChild('Wickets','520'); 
+ 
+ 
+$xml->asXML('cricket.xml'); 
+ 
+echo "Record added successfully......."; 
+?> 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+import nltk
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
+# Read the dataset
+df = pd.read_csv('covid_2021_1.csv')
+
+# Remove null values and duplicates
+df.dropna(inplace=True)
+df.drop_duplicates(subset='Comment', inplace=True)
+
+# Tokenize comments into words
+nltk.download('punkt')
+df['tokens'] = df['Comment'].apply(nltk.word_tokenize)
+
+# Perform sentiment analysis
+nltk.download('vader_lexicon')
+sia = SentimentIntensityAnalyzer()
+df['sentiment'] = df['Comment'].apply(lambda x: sia.polarity_scores(x)['compound'])
+
+# Calculate percentage of positive, negative, and neutral comments
+total_comments = len(df)
+positive_comments = len(df[df['sentiment'] > 0])
+negative_comments = len(df[df['sentiment'] < 0])
+neutral_comments = len(df[df['sentiment'] == 0])
+
+positive_percentage = (positive_comments / total_comments) * 100
+negative_percentage = (negative_comments / total_comments) * 100
+neutral_percentage = (neutral_comments / total_comments) * 100
+
+# Print the results
+print('Total Comments:', total_comments)
+print('Positive Comments:', positive_comments, '(', positive_percentage, '%)')
+print('Negative Comments:', negative_comments, '(', negative_percentage, '%)')
+print('Neutral Comments:', neutral_comments, '(', neutral_percentage, '%)')

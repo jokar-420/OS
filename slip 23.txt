@@ -1,0 +1,130 @@
+views/welcome_message.php
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+$this->load->helper('url');
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Q2</title>
+</head>
+<body>
+	<?php echo validation_errors(); ?>
+
+	<?php echo form_open('welcome/add'); ?>
+		<label>Rollno: </label>
+		<input type="number" name="rollno">
+		<label>Name: </label>
+		<input type="text" name="name">
+		<label>Class: </label>
+		<input type="text" name="class">
+		<button>submit</button>
+	</form>
+	<br>
+	<?php echo form_open('welcome/show'); ?>
+		<button>view data</button>
+	</form>
+</body>
+</html>
+
+views/data_view.php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Uploaded Data</title>
+</head>
+<body>
+<h2>Data</h2>
+<?php if (empty($records)): ?>
+    <p>No data available.</p>
+<?php else: ?>
+    <table border="1">
+        <tr><th>Roll</th><th>Name</th><th>Class</th></tr> 
+        <?php foreach ($records as $record): ?>
+            <tr>
+                <td><?php echo $record['rollno']; ?></td>
+                <td><?php echo $record['name']; ?></td>
+                <td><?php echo $record['class']; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php endif; ?>
+</body>
+</html>
+
+controllers/Welcom.php
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+class Welcome extends CI_Controller {
+public function __construct() {
+		parent::__construct();
+        $this->load->library('form_validation');
+		$this->load->model('Model');
+		$this->load->helper('url');
+	}
+	public function index() {
+        $this->load->view('welcome_message.php');
+    }
+public function add() {
+        $this->form_validation->set_rules('rollno', 'Rollno', 'required');
+        $this->form_validation->set_rules('name', 'Name', 'required');
+        $this->form_validation->set_rules('class', 'Class', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('welcome_message');
+        } else {
+            $data['rollno'] = $this->input->post('rollno');
+            $data['name'] = $this->input->post('name');
+            $data['class'] = $this->input->post('class');
+            $this->Model->save_form_data($data);
+            redirect('welcome');
+        }
+    }
+    public function show() {
+        $data['records'] = $this->Model->get_uploaded_data();
+        $this->load->view('data_view', $data);
+    }
+}
+
+models/Model.php
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Model extends CI_Model {
+    public function save_form_data($data) {
+        $this->db->insert('student', $data);
+    }
+    public function get_uploaded_data() {
+        $query = $this->db->get('student');
+        return $query->result_array();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import re
+
+# Sample text
+text = "Hello,#world123!This is a sample text paragraph. It contains special characters and 5 digits."
+
+# Removes special characters and digits
+processed_text = re.sub(r'[^a-zA-Z\s]', '', text)
+
+# Print the processed text
+print(processed_text)
