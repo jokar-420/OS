@@ -1,0 +1,122 @@
+import java.util.*;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the text to scroll: ");
+		String text = sc.nextLine();
+		int width = 20;
+		int position = 0;
+		int direction = 1;
+		while (true) {
+			for (int i = 0; i < width; i++) {
+				System.out.print(" ");
+			}
+			for (int i = 0; i < text.length(); i++) {
+				if (i + position >= 0 && i + position < width) {
+					System.out.print(text.charAt(i));
+				} else {
+					System.out.print(" ");
+				}
+			}
+			position += direction;
+			if (position == width - text.length() || position == 0) {
+				direction = -direction;
+			}
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			for (int i = 0; i < width + text.length(); i++) {
+				System.out.print("\b");
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Index.html 
+<html> 
+<head> 
+<title>Login Page</title> 
+</head> 
+<body> 
+<form action="checkdetails.jsp"> 
+<legend>Enter User Id and Password...!!!</legend> 
+UserId: <input type="text" name="id" /> <br><br> 
+Password: <input type="text" name="pass" /> <br><br> 
+<input type="submit" value="Sign In!!"/> 
+</div> 
+</form> 
+</body> 
+</html>
+ 
+Checkdetails.jsp 
+<html> 
+<head> 
+<title>Check Credentials</title> 
+</head> 
+<body> 
+<% 
+ String uid=request.getParameter("id"); 
+ String password=request.getParameter("pass"); 
+ session.setAttribute("session-uid", uid); 
+ if(uid.equals("Sofiya") && password.equals("Shaikh")) 
+ { 
+ response.sendRedirect("success.jsp"); 
+ } 
+ else 
+ { 
+ response.sendRedirect("failed.jsp"); 
+ } 
+ %> 
+</body> 
+</html> 
+
+Success.jsp 
+<html> 
+<head><title>Success Page</title></head> 
+<body> 
+<% 
+ String data=(String)session.getAttribute("session-uid"); 
+ out.println(" Login Successfully...!!!"); 
+ %> 
+</body> 
+</html> 
+
+Failed.jsp 
+<html> 
+<head><title>Sign-in Failed Page</title></head> 
+<body> 
+<% 
+ String data2=(String)session.getAttribute("session-uid"); 
+ out.println(" User Id and Password are wrong. Please try Again."); 
+ %> 
+</body> 
+</html>

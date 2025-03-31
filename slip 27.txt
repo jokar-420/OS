@@ -1,0 +1,171 @@
+import java.sql.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.table.*;
+
+class Main extends JFrame implements ActionListener {
+
+    Connection con;
+    ResultSet rs;
+    Statement st;
+
+    static JTable table;
+    String[] columnNames = { "CID", "CName", "Address", "Year" };
+    JFrame frm;
+    JPanel p1;
+    String c_id = "", c_name = "", address = "", year = "";
+    JTextField txtid, txtname, txtdesc, textstatus;
+    JButton Display, Exit;
+
+    Main() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("PROJECT INFO");
+
+        p1 = new JPanel();
+        p1.setLayout(new GridLayout(2, 2, 30, 30));
+        Display = new JButton("Display");
+        p1.add(Display);
+        Exit = new JButton("Exit");
+        p1.add(Exit);
+        Display.addActionListener(this);
+        Exit.addActionListener(this);
+        add(p1, BorderLayout.CENTER);
+        setVisible(true);
+        setSize(600, 600);
+    }
+
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == Display) {
+            frm = new JFrame("DISPLAY");
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLayout(new BorderLayout());
+            DefaultTableModel model = new DefaultTableModel();
+            model.setColumnIdentifiers(columnNames);
+            table = new JTable();
+            table.setModel(model);
+            table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+            table.setFillsViewportHeight(true);
+            JScrollPane scroll = new JScrollPane(table);
+            scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            try {
+            	Class.forName("com.mysql.cj.jdbc.Driver");
+        		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/student", "root", "student");
+                st = con.createStatement();
+                rs = st.executeQuery("select * from college");
+                while (rs.next()) {
+                    c_id = rs.getString(1);
+                    c_name = rs.getString(2);
+                    address = rs.getString(3);
+                    year = rs.getString(4);
+                    model.addRow(new Object[] { c_id, c_name, address, year });
+                }
+                frm.add(scroll);
+                frm.setVisible(true);
+                frm.setSize(400, 400);
+            }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        if (ae.getSource() == Exit) {
+            System.exit(1);
+        }
+    }
+    public static void main(String arg[]) {
+        new Main();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import java.util.*; 
+import java.io.*; 
+import javax.servlet.*; 
+import javax.servlet.http.*; 
+public class MyServlet extends HttpServlet 
+{ 
+public void doGet(HttpServletRequest req, HttpServletResponse res) 
+throws ServletException, IOException 
+{ 
+res.setContentType("text/html"); 
+PrintWriter out = res.getWriter(); 
+// Get the current session object, create one if necessary 
+HttpSession session = req.getSession(); 
+out.println("<HTML><HEAD><TITLE>SessionTimer</TITLE></HEAD>"); 
+out.println("<BODY><H1>Session Timer<</H1>"); 
+// Display the previous timeout 
+out.println("The previous timeout was " + 
+session.getMaxInactiveInterval()); 
+out.println("<BR>"); 
+// Set the new timeout 
+session.setMaxInactiveInterval(2*60*60); // two hours 
+// Display the new timeout 
+out.println("The newly assigned timeout is " + session.getMaxInactiveInterval()); 
+out.println("</BODY></HTML>"); 
+} 
+} 
+//xml code 
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN" 
+"http://java.sun.com/j2ee/dtds/web-app_2_2.dtd"> 
+<web-app> 
+<servlet><servlet-name>MyServletName</servlet-name> 
+<servlet-class>MyServlet</servlet-class> 
+</servlet> 
+<servlet-mapping><servlet-name>MyServletName</servlet-name> 
+<url-pattern>/index.html</url-pattern> 
+</servlet-mapping> 
+</web-app> 
+build .xml <project name="MyProject" default="compile" basedir="."> 
+<property name="sourcedir" value="${basedir}/src"/> 
+<property name="webdir" value="${basedir}/build"/> <property name="javaSourcedir" 
+value="${sourcedir}/WEB-INF/classes"/> 
+<property name="webClassdir" value="${webdir}/WEB-INF/classes"/> 
+<property name="webClassLib" value="${webdir}/WEB-INF/lib"/> 
+<property name="compileLibDir" value="${basedir}/lib"/> 
+<path id="libraries"> 
+<fileset dir="${compileLibDir}"> 
+<include name="*.jar"/> 
+</fileset> 
+</path> 
+<target name="clean"> 
+<delete dir="${webdir}"/> 
+<mkdir dir="${webClassdir}"/> 
+</target> 
+<target name="copy"> 
+<copy todir="${webdir}"> 
+<fileset dir="${sourcedir}"> 
+<exclude name="**/*.java"/> 
+</fileset> 
+</copy> 
+</target> 
+<target name="compile" depends="clean, copy"> 
+<javac srcdir="${javaSourcedir}" 
+destdir="${webClassdir}" 
+classpathref="libraries"/> 
+<!-- one for deployment, another one for reference --> 
+<war warfile="demo.war" basedir="${webdir}" webxml="${webdir}/WEB-INF/web.xml"> 
+<exclude name="WEB-INF/web.xml"/> 
+</war> 
+<war warfile="../demo.war" basedir="${webdir}" webxml="${webdir}/WEBINF/web.xml"> 
+<exclude name="WEB-INF/web.xml"/> 
+</war> 
+<delete dir="${webdir}"/> 
+</target> 
+</project>

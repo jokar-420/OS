@@ -1,0 +1,83 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+</head> 
+<body> 
+<form action="Slip29.jsp" method="post"> 
+Name : <input type="text" name="name"> 
+Age : <input type="text" name="age"> 
+<input type="submit" value="Check"> 
+</form> 
+</body> 
+</html> 
+
+JSP FILE: 
+<%@page contentType="text/html" pageEncoding="UTF-8"%> 
+<!DOCTYPE html> 
+<% 
+String name = request.getParameter("name"); 
+int age = Integer.parseInt(request.getParameter("age")); 
+if(age >=18) 
+{ 
+out.println(name + "\nAllowed to vote"); 
+} 
+else 
+{ 
+out.println(name + "\nNot allowed to vote"); 
+} 
+%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+public class DB10_CreatAlterDrop{
+ public static void main(String[] args) throws Exception
+{ 
+ try
+{
+Class.forName("org.postgresql.Driver");
+ Connection con = 
+DriverManager.getConnection("jdbc:postgresql://172.16.6.1/ty172", "ty172", 
+"");
+Statement stmt = con.createStatement();
+ String createTableSQL = "CREATE TABLE users (" +
+ "id INT PRIMARY KEY, " +
+ "username VARCHAR(50) NOT NULL, " +
+ "email VARCHAR(100) NOT NULL)";
+stmt.executeUpdate(createTableSQL);
+ System.out.println("Table 'users' created successfully.");
+ // Altering the table to add a new column
+ String addColumnSQL = "ALTER TABLE users ADD COLUMN age INT";
+ stmt.executeUpdate(addColumnSQL);
+ System.out.println("Column 'age' added successfully to 'users' table.");
+ // Dropping the table
+ String dropTableSQL = "DROP TABLE IF EXISTS users";
+ stmt.executeUpdate(dropTableSQL);
+ System.out.println("Table 'users' dropped successfully.");
+ } catch (SQLException e) {
+ e.printStackTrace();
+ }
+ }
+}

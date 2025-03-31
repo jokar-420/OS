@@ -1,0 +1,103 @@
+import java.util.Date;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HelloController {
+	@GetMapping
+	public String hello() {
+		Date current_Date = new Date();
+		return current_Date.toString();
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+class DB11_StudSwing extends JFrame implements ActionListener
+{
+ JTextField txtRno, txtSname, txtPer;
+ JButton btnFetch;
+DB11_StudSwing() 
+{
+ setTitle("Student Record Display");
+ setSize(350, 200);
+ 
+ setLayout(new GridLayout(4, 2));
+ 
+ add(new JLabel("Roll No:"));
+ txtRno = new JTextField();
+ add(txtRno);
+ 
+ add(new JLabel("Name:"));
+ txtSname = new JTextField();
+ add(txtSname);
+ 
+ add(new JLabel("Percentage:"));
+ txtPer = new JTextField();
+ add(txtPer);
+ 
+ btnFetch = new JButton("Fetch Record");
+ add(btnFetch);
+btnFetch.addActionListener(this);
+setVisible(true);
+setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+ }
+ public void actionPerformed(ActionEvent e)
+{
+ try
+{
+ Class.forName("org.postgresql.Driver");
+ Connection con = 
+DriverManager.getConnection("jdbc:postgresql://172.16.6.1/ty172", "ty172", 
+"");
+ Statement stmt = con.createStatement();
+ ResultSet rs = stmt.executeQuery("select * from studentTY");
+ if(e.getSource()==btnFetch) 
+ {
+ if (rs.next()) 
+{
+ txtRno.setText(String.valueOf(rs.getInt(1)));
+ txtSname.setText(rs.getString(2));
+ txtPer.setText(String.valueOf(rs.getInt(3)));
+ } 
+ else 
+{
+ JOptionPane.showMessageDialog(this, "No records found!");
+ }
+ }
+ rs.close();
+ stmt.close();
+ con.close();
+}
+ catch (Exception ex) 
+{
+ JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+}
+ }
+ public static void main(String[] args) 
+ {
+ new DB11_StudSwing();
+ }
+ }

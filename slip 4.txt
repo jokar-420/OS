@@ -1,0 +1,134 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+public class Thread10BlinkText extends JFrame implements Runnable
+{
+ Thread t;
+ JLabel l1;
+ int f;
+ public Thread10BlinkText()
+ {
+ t=new Thread(this);
+ t.start();
+ setLayout(null);
+ //f1=new Frame();
+ l1=new JLabel("Hello JAVA");
+ l1.setBounds(100,100,100,40);
+ add(l1);
+ setSize(300,300);
+ setVisible(true);
+ setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ f=0;
+ }
+ public void run()
+ {
+ try
+ {
+ if(f==0)
+ {
+ t.sleep(200);
+ l1.setText("");
+ f=1;
+ }
+ if(f==1)
+ {
+ t.sleep(200);
+ l1.setText("Hello Java");
+ f=0;
+ //System.exit(0);
+ }
+ }
+ catch(Exception e)
+ {
+ System.out.println(e);
+ }
+ run();
+ }
+ public static void main(String args[])
+ {
+ new Thread10BlinkText();
+ }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import java.util.Hashtable;
+import java.util.Scanner;
+class CollAss3
+{
+ public static void main(String args[])
+ {
+ Hashtable<String, String> citySTDTable=new Hashtable<>();
+ citySTDTable.put("Mumbai","001");
+ citySTDTable.put("Delhi","002");
+ citySTDTable.put("Pune","003");
+ System.out.println(citySTDTable);
+ Scanner sc=new Scanner(System.in);
+ int choice;
+ do
+ { 
+ System.out.println("------------------------------");
+ System.out.println("1.Add a new city and its code");
+ System.out.println("2.Remove city from collection");
+ System.out.println("3.Search for a city and display its code");
+ System.out.println("4.Exit");
+ System.out.println("Enter your choice:");
+ choice=sc.nextInt();
+ switch(choice)
+ {
+ case 1:
+ System.out.println("Enter city name:");
+ String newCity=sc.next();
+ if(citySTDTable.containsKey(newCity))
+ {
+ System.out.println("City already exists");
+ } 
+ else
+ {
+ System.out.println("Enter STD code for"+newCity + ":");
+ String newCode=sc.next();
+ citySTDTable.put(newCity,newCode);
+ }
+ System.out.println(citySTDTable);
+ break;
+ case 2:
+ System.out.println("Enter city name to remove:");
+ String cityToRemove=sc.next();
+ citySTDTable.remove(cityToRemove);
+ System.out.println(citySTDTable);
+ break;
+ case 3:
+ System.out.println("Enter city name to search:");
+ String cityToSearch=sc.next();
+ String cityCode=citySTDTable.get(cityToSearch);
+ if(cityCode !=null)
+ {
+ System.out.println("The STD code for " +cityToSearch+" is "+cityCode);
+ }
+ else
+ {
+ System.out.println("city not found");
+ }
+ break;
+ case 4:
+ break;
+ default:
+ System.out.println("Invalid Choice");
+ }
+ }
+ while(choice != 4); 
+ }
+}

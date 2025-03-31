@@ -1,0 +1,58 @@
+<html>
+<body>
+	<form method = "post">
+		Enter a string: <input type = "text" name = "str1"><br><br>
+		<input type = "submit" value="Reverse">
+	</form>
+	<br><br>
+	<%
+		String str1 = request.getParameter("str1");
+		if(str1 != null && !str1.isEmpty()){
+			String revStr = new StringBuilder(str1).reverse().toString();
+			out.println("Original string: " + str1 + "<br>");
+			out.println("Reversed string: " + revStr + "<br>");
+		}
+	%>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class MyThread extends Thread
+{
+public void run()
+{
+System.out.println("Executing thread is :"+this.getName());
+}
+}
+class Thread7CurrentThread
+{
+public static void main(String args[])
+{
+MyThread t1=new MyThread();
+MyThread t2=new MyThread();
+MyThread t3=new MyThread();
+t1.start();
+t2.start();
+t3.start();
+}
+}
